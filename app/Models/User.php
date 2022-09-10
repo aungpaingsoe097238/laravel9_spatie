@@ -9,6 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+// composer require spatie/laravel-permission
+// composer require laravelcollective/html
+// php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable , HasRoles;

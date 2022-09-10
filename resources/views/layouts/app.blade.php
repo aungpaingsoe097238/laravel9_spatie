@@ -50,7 +50,9 @@
                             @endif
                         @else
                             <li><a class="nav-link" href="{{ route('users.index') }}">Manage Users</a></li>
+                            @can('role-list')
                             <li><a class="nav-link" href="{{ route('roles.index') }}">Manage Role</a></li>
+                            @endcan
                             <li><a class="nav-link" href="{{ route('products.index') }}">Manage Product</a></li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

@@ -5,6 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
+                <a href="{{ route('roles.create') }}" class="btn btn-primary">create role</a>
                 <table class="table table-bordered">
                     <tr>
                        <th>#</th>

@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:product-list|product-create|product-edit|product-delete', ['only' => ['index','store']]);
+         $this->middleware('permission:product-create', ['only' => ['create','store']]);
+         $this->middleware('permission:product-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:product-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +21,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::latest('id')->paginate(5);
+        return view('products.index',compact('products'));
     }
 
     /**
@@ -23,7 +32,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -34,7 +43,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:products,name',
+            'detail' => 'required'
+        ]);
+
+        $input = $request->all();
+        Product::create($input);
+        return redirect()->route('products.index');
     }
 
     /**
@@ -45,7 +61,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return $product;
     }
 
     /**
@@ -56,7 +73,8 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view('products.edit',compact('product'));
     }
 
     /**
@@ -68,7 +86,17 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'detail' => 'required'
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->name = $request->name;
+        $product->detail = $request->detail;
+        $product->update();
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -79,6 +107,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return redirect()->route('products.index');
     }
 }
